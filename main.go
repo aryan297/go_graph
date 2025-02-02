@@ -95,18 +95,44 @@ func removeEdge(s []*Vertex, k int) []*Vertex {
 	}
 	return s
 }
+
+func topologicalSortNew(g *Graph) {
+	visited := make(map[int]bool)
+	stack := []int{}
+
+	for key := range g.Vertices {
+		if !visited[key] {
+			topologicalSortHelperNew(g, key, visited, &stack)
+		}
+	}
+	fmt.Println(stack, "sort")
+}
+
+func topologicalSortHelperNew(g *Graph, key int, visited map[int]bool, stack *[]int) {
+	visited[key] = true
+	for _, neighbour := range g.Vertices[key].adjecent {
+		if !visited[neighbour.key] {
+			topologicalSortHelperNew(g, neighbour.key, visited, stack)
+		}
+	}
+	*stack = append(*stack, key)
+}
 func main() {
-	/* 	graph := &Graph{}
-	   	for i := 0; i < 5; i++ {
-	   		graph.AddVertex(i)
-	   	}
-	   	graph.AddEdge(1, 2)
-	   	graph.AddEdge(1, 4)
-	   	graph.AddEdge(1, 3)
-	   	graph.AddEdge(1, 4)
-	   	graph.Print()
-	   	graph.RemoveVertex(2)
-	   	graph.Print() */
+	graphs := &Graph{}
+	for i := 0; i < 5; i++ {
+		graphs.AddVertex(i)
+	}
+	graphs.AddEdge(1, 2)
+	graphs.AddEdge(1, 3)
+	graphs.AddEdge(2, 4)
+	graphs.AddEdge(2, 5)
+	//graphs.Print()
+	//graphs.RemoveVertex(2)
+	//	graphs.Print()
+
+	topologicalSortNew(graphs)
+
+	fmt.Println("sort done:")
 
 	gr := NewAdjancyMatrixGraph(5)
 	gr.AddEdge(0, 1)

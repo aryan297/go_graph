@@ -68,3 +68,25 @@ func (g *Graphs) DFS(start int) {
 	fmt.Println()
 
 }
+
+func topoligicalSort(g *Graphs) {
+	visited := make(map[int]bool)
+	stack := []int{}
+
+	for key := range g.Vertices {
+		if !visited[key] {
+			topologicalSortHelper(g, key, visited, &stack)
+		}
+	}
+	fmt.Println(stack)
+}
+
+func topologicalSortHelper(g *Graphs, key int, visited map[int]bool, stack *[]int) {
+	visited[key] = true
+	for _, neighbour := range g.Vertices[key] {
+		if !visited[neighbour] {
+			topologicalSortHelper(g, neighbour, visited, stack)
+		}
+	}
+	*stack = append(*stack, key)
+}
